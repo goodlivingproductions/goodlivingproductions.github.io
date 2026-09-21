@@ -1,0 +1,233 @@
+---
+import { getEntry, getCollection } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+
+const work = await getEntry('pages', 'work');
+
+if (!work) {
+  throw new Error('Work page content could not be found.');
+}
+
+const releases = await getCollection('releases');
+
+const sortedReleases = releases
+  .sort((a, b) => {
+    const dateA = a.data.releaseDate?.getTime() ?? 0;
+    const dateB = b.data.releaseDate?.getTime() ?? 0;
+
+    return dateB - dateA;
+  })
+  .slice(0, 6);
+---
+
+<PageLayout
+  title={work.data.title}
+  description={work.data.description}
+>
+  <section class="page-header">
+    <div class="container">
+      <p class="eyebrow">Selected Work</p>
+
+      <h1>Music made to be heard.</h1>
+
+      <p class="intro">
+        {work.data.description}
+      </p>
+    </div>
+  </section>
+
+  <section class="releases">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Releases</p>
+        <h2>Recent work.</h2>
+      </div>
+
+      {sortedReleases.length > 0 ? (
+        <div class="release-grid">
+          {sortedReleases.map((release) => (
+            <a
+              class="release"
+              href={`/releases/${release.id}/`}
+            >
+              {release.data.cover ? (
+                <div class="release-cover">
+                  <img
+                    src={release.data.cover}
+                    alt={`${release.data.title} by ${release.data.artist}`}
+                    loading="lazy"
+                  />
+                </div>
+              ) : (
+                <div class="release-cover placeholder">
+                  <span>No Artwork</span>
+                </div>
+              )}
+
+              <div class="release-info">
+                <p class="release-type">Release</p>
+
+                <h3>{release.data.title}</h3>
+
+                <p class="artist">
+                  {release.data.artist}
+                </p>
+
+                <p class="description">
+                  {release.data.description}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="empty-state">
+          Releases will be added here soon.
+        </p>
+      )}
+    </div>
+  </section>
+
+  <section class="artists">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Artists</p>
+        <h2>Artists we've worked with.</h2>
+      </div>
+
+      <p class="coming-soon">
+        Artist profiles and additional projects coming soon.
+      </p>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .page-header {
+    padding-block: 8rem 6rem;
+  }
+
+  .eyebrow {
+    margin-bottom: 2rem;
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    max-width: 900px;
+    margin-bottom: 2rem;
+    font-weight: 500;
+  }
+
+  .intro {
+    max-width: 700px;
+    font-size: 1.2rem;
+  }
+
+  .releases,
+  .artists {
+    padding-block: 7rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .section-heading {
+    margin-bottom: 4rem;
+  }
+
+  .section-heading h2 {
+    margin-bottom: 0;
+    font-weight: 500;
+  }
+
+  .release-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3rem 2rem;
+  }
+
+  .release {
+    display: block;
+  }
+
+  .release-cover {
+    aspect-ratio: 1;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .release-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 300ms ease;
+  }
+
+  .release:hover .release-cover img {
+    transform: scale(1.03);
+  }
+
+  .release-cover.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .release-type {
+    margin-bottom: 0.5rem;
+    color: var(--color-accent);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .release-info h3 {
+    margin-bottom: 0.4rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
+  .artist {
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+    font-size: 0.9rem;
+  }
+
+  .description {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+  }
+
+  .empty-state,
+  .coming-soon {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 850px) {
+    .release-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .page-header,
+    .releases,
+    .artists {
+      padding-block: 5rem;
+    }
+
+    .release-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

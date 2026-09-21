@@ -1,0 +1,117 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  release: CollectionEntry<'releases'>;
+}
+
+const { release } = Astro.props;
+
+const { title, artist, description, cover, releaseDate } = release.data;
+
+const formattedDate = releaseDate
+  ? releaseDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : undefined;
+---
+
+<a class="release-card" href={`/releases/${release.id}/`}>
+  {cover ? (
+    <div class="cover">
+      <img
+        src={cover}
+        alt={`${title} by ${artist}`}
+        loading="lazy"
+      />
+    </div>
+  ) : (
+    <div class="cover placeholder" aria-hidden="true">
+      <span>No Artwork</span>
+    </div>
+  )}
+
+  <div class="info">
+    <p class="type">Release</p>
+
+    <h3>{title}</h3>
+
+    <p class="artist">{artist}</p>
+
+    <p class="description">{description}</p>
+
+    {formattedDate && (
+      <time datetime={releaseDate?.toISOString()}>
+        {formattedDate}
+      </time>
+    )}
+  </div>
+</a>
+
+<style>
+  .release-card {
+    display: block;
+  }
+
+  .cover {
+    aspect-ratio: 1;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 300ms ease;
+  }
+
+  .release-card:hover .cover img {
+    transform: scale(1.03);
+  }
+
+  .placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .type {
+    margin-bottom: 0.5rem;
+    color: var(--color-accent);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    margin-bottom: 0.4rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
+  .artist {
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+    font-size: 0.9rem;
+  }
+
+  .description {
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  time {
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+  }
+</style>

@@ -1,0 +1,83 @@
+---
+import { getEntry, render } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+
+const about = await getEntry('pages', 'about');
+
+if (!about) {
+  throw new Error('About page content could not be found.');
+}
+
+const { Content } = await render(about);
+---
+
+<PageLayout
+  title={about.data.title}
+  description={about.data.description}
+>
+  <section class="about-page">
+    <div class="container content">
+      <Content />
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .about-page {
+    padding-block: 8rem;
+  }
+
+  .content {
+    max-width: 900px;
+  }
+
+  .content :global(h2) {
+    margin-top: 7rem;
+    margin-bottom: 2rem;
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .content :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .content :global(h3) {
+    max-width: 800px;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 500;
+  }
+
+  .content :global(p) {
+    max-width: 700px;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .content :global(strong) {
+    display: block;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 640px) {
+    .about-page {
+      padding-block: 5rem;
+    }
+
+    .content :global(h2) {
+      margin-top: 5rem;
+    }
+  }
+</style>

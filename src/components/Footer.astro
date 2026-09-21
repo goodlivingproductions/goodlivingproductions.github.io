@@ -1,0 +1,117 @@
+---
+import { site } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="brand-main">GOOD LIVING</span>
+      <span class="brand-sub">PRODUCTIONS</span>
+    </div>
+
+    <div class="footer-links">
+      {site.contact.email && (
+        <a href={`mailto:${site.contact.email}`}>
+          {site.contact.email}
+        </a>
+      )}
+
+      {site.social.instagram && (
+        <a href={site.social.instagram} target="_blank" rel="noopener noreferrer">
+          Instagram
+        </a>
+      )}
+
+      {site.social.youtube && (
+        <a href={site.social.youtube} target="_blank" rel="noopener noreferrer">
+          YouTube
+        </a>
+      )}
+
+      {site.social.spotify && (
+        <a href={site.social.spotify} target="_blank" rel="noopener noreferrer">
+          Spotify
+        </a>
+      )}
+    </div>
+
+    <p class="copyright">
+      © {year} {site.name}
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: auto;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .footer-inner {
+    min-height: 10rem;
+    padding-block: 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 2rem;
+  }
+
+  .footer-brand {
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .brand-main {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+  }
+
+  .brand-sub {
+    margin-top: 0.3rem;
+    color: var(--color-text-muted);
+    font-size: 0.5rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 1.5rem;
+  }
+
+  .footer-links a {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+  }
+
+  .footer-links a:hover {
+    color: var(--color-text);
+  }
+
+  .copyright {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 640px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-links {
+      justify-content: flex-start;
+    }
+
+    .copyright {
+      grid-column: auto;
+    }
+  }
+</style>

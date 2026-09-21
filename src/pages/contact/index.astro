@@ -1,0 +1,191 @@
+---
+import { getEntry, render } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+import { site } from '../../data/site';
+
+const contact = await getEntry('pages', 'contact');
+
+if (!contact) {
+  throw new Error('Contact page content could not be found.');
+}
+
+const { Content } = await render(contact);
+---
+
+<PageLayout
+  title={contact.data.title}
+  description={contact.data.description}
+>
+  <section class="page-header">
+    <div class="container">
+      <p class="eyebrow">Contact</p>
+
+      <h1>Let's make something.</h1>
+
+      <div class="intro">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-content">
+    <div class="container">
+      <div class="contact-grid">
+        <div>
+          <p class="eyebrow">Start a Conversation</p>
+
+          {site.contact.email ? (
+            <a class="email" href={`mailto:${site.contact.email}`}>
+              {site.contact.email}
+            </a>
+          ) : (
+            <p class="placeholder">
+              Contact information coming soon.
+            </p>
+          )}
+        </div>
+
+        <div class="contact-details">
+          <div>
+            <h2>Services</h2>
+
+            <ul>
+              <li>Music Production</li>
+              <li>Mixing &amp; Mastering</li>
+              <li>Live Sound</li>
+              <li>Music Lessons</li>
+              <li>Consulting</li>
+            </ul>
+          </div>
+
+          <div>
+            <h2>Education</h2>
+
+            <p>
+              Looking to book a lesson or consultation?
+            </p>
+
+            <a class="text-link" href="/education/">
+              View Education →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .page-header {
+    padding-block: 8rem 7rem;
+  }
+
+  .eyebrow {
+    margin-bottom: 2rem;
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    max-width: 900px;
+    margin-bottom: 2rem;
+    font-weight: 500;
+  }
+
+  .intro {
+    max-width: 650px;
+  }
+
+  .intro :global(h2),
+  .intro :global(h3) {
+    display: none;
+  }
+
+  .intro :global(p) {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+  }
+
+  .contact-content {
+    padding-block: 7rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+  }
+
+  .email {
+    display: inline-block;
+    color: var(--color-text);
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    line-height: 1.2;
+    word-break: break-word;
+  }
+
+  .email:hover {
+    color: var(--color-accent);
+  }
+
+  .placeholder {
+    margin: 0;
+  }
+
+  .contact-details {
+    display: grid;
+    gap: 4rem;
+  }
+
+  .contact-details h2 {
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .contact-details ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .contact-details li {
+    padding-block: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  .contact-details p {
+    margin-bottom: 1rem;
+  }
+
+  .text-link {
+    color: var(--color-text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .text-link:hover {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 750px) {
+    .page-header,
+    .contact-content {
+      padding-block: 5rem;
+    }
+
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 4rem;
+    }
+  }
+</style>

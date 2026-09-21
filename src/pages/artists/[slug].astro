@@ -1,0 +1,168 @@
+---
+import { getCollection, render } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+
+export async function getStaticPaths() {
+  const artists = await getCollection('artists');
+
+  return artists.map((artist) => ({
+    params: { slug: artist.id },
+    props: { artist },
+  }));
+}
+
+const { artist } = Astro.props;
+const { Content } = await render(artist);
+
+const {
+  name,
+  description,
+  image,
+} = artist.data;
+---
+
+<PageLayout
+  title={name}
+  description={description}
+  image={image}
+>
+  <article class="artist-page">
+    <section class="artist-header">
+      <div class="container artist-header-inner">
+        {image && (
+          <div class="artist-image">
+            <img
+              src={image}
+              alt={name}
+            />
+          </div>
+        )}
+
+        <div class="artist-intro">
+          <p class="eyebrow">Artist</p>
+
+          <h1>{name}</h1>
+
+          <p class="description">
+            {description}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="artist-content">
+      <div class="container content-grid">
+        <div class="content">
+          <Content />
+        </div>
+      </div>
+    </section>
+  </article>
+</PageLayout>
+
+<style>
+  .artist-header {
+    padding-block: 7rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .artist-header-inner {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.8fr) 1.2fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .artist-image {
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+  }
+
+  .artist-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .eyebrow {
+    margin-bottom: 1.5rem;
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  .description {
+    max-width: 600px;
+    font-size: 1.2rem;
+  }
+
+  .artist-content {
+    padding-block: 6rem 8rem;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 800px);
+    justify-content: center;
+  }
+
+  .content :global(h2) {
+    margin-top: 4rem;
+    margin-bottom: 1.5rem;
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 500;
+  }
+
+  .content :global(h3) {
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .content :global(p) {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .content :global(ul) {
+    padding-left: 1.25rem;
+    color: var(--color-text-muted);
+  }
+
+  .content :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  .content :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  @media (max-width: 750px) {
+    .artist-header {
+      padding-block: 5rem;
+    }
+
+    .artist-header-inner {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .artist-image {
+      max-width: 500px;
+    }
+
+    .artist-content {
+      padding-block: 5rem;
+    }
+  }
+</style>

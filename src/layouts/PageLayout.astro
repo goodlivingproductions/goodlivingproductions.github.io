@@ -1,0 +1,42 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title,
+  description = site.description,
+  image,
+} = Astro.props;
+---
+
+<BaseLayout title={`${title} — ${site.name}`} description={description} image={image}>
+  <div class="site-shell">
+    <Header />
+
+    <main>
+      <slot />
+    </main>
+
+    <Footer />
+  </div>
+</BaseLayout>
+
+<style>
+  .site-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1;
+  }
+</style>

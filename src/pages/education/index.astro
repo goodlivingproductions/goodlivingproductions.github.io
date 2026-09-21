@@ -1,0 +1,275 @@
+---
+import { getEntry, render } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+
+const education = await getEntry('pages', 'education');
+
+if (!education) {
+  throw new Error('Education page content could not be found.');
+}
+
+const { Content } = await render(education);
+---
+
+<PageLayout
+  title={education.data.title}
+  description={education.data.description}
+>
+  <section class="page-header">
+    <div class="container">
+      <p class="eyebrow">Education</p>
+
+      <h1>Learn the craft. Build your sound.</h1>
+
+      <div class="intro">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Lessons &amp; Consulting</p>
+        <h2>Choose your focus.</h2>
+      </div>
+
+      <div class="lesson-grid">
+        <article class="lesson">
+          <span class="number">01</span>
+          <h3>Guitar</h3>
+          <p>
+            Technique, musicianship, songwriting, tone, and practical playing.
+          </p>
+        </article>
+
+        <article class="lesson">
+          <span class="number">02</span>
+          <h3>Bass</h3>
+          <p>
+            Groove, technique, theory, tone, and playing within an ensemble.
+          </p>
+        </article>
+
+        <article class="lesson">
+          <span class="number">03</span>
+          <h3>Drums</h3>
+          <p>
+            Fundamentals, groove, coordination, dynamics, and musicality.
+          </p>
+        </article>
+
+        <article class="lesson">
+          <span class="number">04</span>
+          <h3>Piano / Keys</h3>
+          <p>
+            Chords, harmony, accompaniment, songwriting, and practical
+            keyboard skills.
+          </p>
+        </article>
+
+        <article class="lesson">
+          <span class="number">05</span>
+          <h3>Singing</h3>
+          <p>
+            Technique, musicianship, performance, vocal development, and
+            healthy practice.
+          </p>
+        </article>
+
+        <article class="lesson">
+          <span class="number">06</span>
+          <h3>Production &amp; Mixing</h3>
+          <p>
+            Recording, arrangement, production, mixing, effects, and workflow.
+          </p>
+        </article>
+
+        <article class="lesson">
+          <span class="number">07</span>
+          <h3>Consultation</h3>
+          <p>
+            One-on-one guidance for artists, musicians, producers, and
+            developing projects.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="booking">
+    <div class="container booking-inner">
+      <div>
+        <p class="eyebrow">Book a Session</p>
+        <h2>Let's get to work.</h2>
+        <p>
+          Choose a lesson or consultation time that works for you.
+        </p>
+      </div>
+
+      <div class="booking-placeholder">
+        <p>Square Booking Embed</p>
+        <span>
+          The booking calendar will be placed here.
+        </span>
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .page-header {
+    padding-block: 8rem 6rem;
+  }
+
+  .eyebrow {
+    margin-bottom: 2rem;
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    max-width: 950px;
+    margin-bottom: 2rem;
+    font-weight: 500;
+  }
+
+  .intro {
+    max-width: 700px;
+  }
+
+  .intro :global(h2),
+  .intro :global(h3) {
+    display: none;
+  }
+
+  .intro :global(p) {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+  }
+
+  .lesson-section {
+    padding-block: 6rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .section-heading {
+    margin-bottom: 4rem;
+  }
+
+  .section-heading h2 {
+    margin-bottom: 0;
+    font-weight: 500;
+  }
+
+  .lesson-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--color-border);
+    border-left: 1px solid var(--color-border);
+  }
+
+  .lesson {
+    min-height: 220px;
+    padding: 2rem;
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .number {
+    display: block;
+    margin-bottom: 3rem;
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+
+  .lesson h3 {
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+  }
+
+  .lesson p {
+    margin-bottom: 0;
+  }
+
+  .booking {
+    padding-block: 8rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .booking-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .booking h2 {
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .booking p {
+    max-width: 500px;
+  }
+
+  .booking-placeholder {
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    text-align: center;
+  }
+
+  .booking-placeholder p {
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .booking-placeholder span {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 850px) {
+    .lesson-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .booking-inner {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .page-header {
+      padding-block: 5rem 4rem;
+    }
+
+    .lesson-section,
+    .booking {
+      padding-block: 5rem;
+    }
+
+    .lesson-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .lesson {
+      min-height: auto;
+    }
+  }
+</style>
